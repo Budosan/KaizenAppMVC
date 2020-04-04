@@ -1,0 +1,118 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<KaizenAppMVC.Models.KaizenUserEditModel>
+
+<meta http-equiv="x-ua-compatible" content="IE=11">
+@{
+    ViewBag.Title = "MyKaizen";
+}
+
+<h2>Moji Predlozi</h2>
+
+<p>
+    @Html.ActionLink("Novi Predlog", "Kaizen", null, new { @class = "btn btn-default" })
+</p>
+<div>
+    @Html.EditorFor(model => model.First().Search, new { htmlAttributes = new { @class = "form-control", @id = "search", @placeholder = "Pretraga..." } })
+    @Html.ValidationMessageFor(model => model.First().Search, "", new { @class = "text-danger" })
+</div>
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        function Contains(text_one, text_two) {
+            if (text_one.indexOf(text_two) != -1)
+                return true;
+        }
+        $("#search").keyup(function () {
+            var searchText = $("#search").val().toLowerCase();
+            $(".Search").each(function () {
+                if (!Contains($(this).text().toLowerCase(), searchText)) {
+                    $(this).hide();
+                }
+                else {
+                    $(this).show();
+                }
+            });
+
+        });
+
+    });
+</script>
+
+<br />
+<div class="table-responsive">
+    <table class="table table-hover" id="kaizen_tbale">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.First().IdeaID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().DepartmentName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().KaizenSuggestion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().DateTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().WorkerID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().WorkerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().WorkerLastname)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr class="Search" , id="Search">
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdeaID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DepartmentName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.KaizenSuggestion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WorkerID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WorkerName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WorkerLastname)
+                </td>
+                <td>
+                    @Html.ActionLink("Detalji", "Details", new { id = item.IdeaID }, new { @class = "btn btn-default", @style = "background-color: #FFF5EE" })
+                    @if (item.Status is "Submitted")
+                    {
+                        @Html.ActionLink("Promeni", "Edit", new { id = item.IdeaID }, new { @class = "btn btn-default", @style = "background-color: #ADD8E6" })
+                    }
+                    @if (item.Status is "Completed")
+                    {
+                        @Html.ActionLink("Potvrdi", "Completed", new { id = item.IdeaID }, new { @class = "btn btn-default", @style = "background-color: #99C68E" })
+                    }
+
+
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+@Html.PagedListPager(Model, page => Url.Action("MyKaizen", new { page }))

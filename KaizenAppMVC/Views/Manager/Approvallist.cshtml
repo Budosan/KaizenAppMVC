@@ -1,0 +1,116 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<KaizenAppMVC.Models.KaizenApproval>
+
+@{
+    ViewBag.Title = "Approval list";
+
+}
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<h2>Lista zahteva za odobrenje</h2>
+
+<p>
+    @Html.ActionLink("Odobreni zahtevi", "ApprovedList", null, new { @class = "btn btn-default" })
+</p>
+<div>
+    @Html.EditorFor(model => model.First().Search, new { htmlAttributes = new { @class = "form-control", @id = "search", @placeholder = "Pretraga..." } })
+    @Html.ValidationMessageFor(model => model.First().Search, "", new { @class = "text-danger" })
+</div>
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        function Contains(text_one, text_two) {
+            if (text_one.indexOf(text_two) != -1)
+                return true;
+        }
+        $("#search").keyup(function () {
+            var searchText = $("#search").val().toLowerCase();
+            $(".Search").each(function () {
+                if (!Contains($(this).text().toLowerCase(), searchText)) {
+                    $(this).hide();
+                }
+                else {
+                    $(this).show();
+                }
+            });
+
+        });
+
+    });
+</script>
+
+<br />
+
+<div class="table-responsive">
+    <table class="table table-hover" id="kaizen_tbale">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.First().KaizenSuggestion)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.First().KaizenSolution)
+                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.First().DepartmentName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().WorkerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().WorkerID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().WorkerLastname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().IdeaID)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr class="Search" , id="Search">
+                <td>
+                    @Html.DisplayFor(modelItem => item.KaizenSuggestion)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.KaizenSolution)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.DepartmentName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WorkerName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WorkerID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WorkerLastname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdeaID)
+                </td>
+                <td>
+                    @Html.ActionLink("Odobrenje", "MyApprovals", new { id = item.IdeaID }, new { @class = "btn btn-default" })
+
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+@Html.PagedListPager(Model, page => Url.Action("Approvallist", new { page }))

@@ -1,0 +1,240 @@
+﻿@model KaizenAppMVC.Models.CompletedKaizenModel
+
+@{
+    Layout = "~/Views/Shared/_Layout - Manager.cshtml";
+    ViewBag.Title = "My Approvals";
+}
+
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+<h2>Odobrenja</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Detalji Kaizen Predloga</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div>
+        <h4>
+            @Html.DisplayNameFor(model => model.IdeaID)
+            @Html.DisplayFor(model => model.IdeaID)
+
+        </h4>
+        <hr />
+        <div>
+            <span id="DepCheck" style="display: none;">
+                @Html.DisplayFor(model => model.DepartmentName)
+
+            </span>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+
+                    <h4>@Html.DisplayNameFor(model => model.KaizenSuggestion):  @Html.DisplayFor(model => model.KaizenSuggestion)</h4>
+
+
+
+                </div>
+                <div class="panel-body">
+                    <h4>
+                        @Html.DisplayNameFor(model => model.KaizenSolution):
+                    </h4>
+                    @Html.DisplayFor(model => model.KaizenSolution)
+
+                </div>
+            </div>
+        </div>
+        <hr />
+        <dl class="dl-horizontal">
+
+            <dt>
+                @Html.DisplayNameFor(model => model.DepartmentName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DepartmentName)
+            </dd>
+            <hr />
+            <dt>
+                @Html.DisplayNameFor(model => model.IdeaID)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.IdeaID)
+            </dd>
+            <hr />
+            @*<dt>
+                @Html.DisplayNameFor(model => model.KaizenSuggestion)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.KaizenSuggestion)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.KaizenSolution)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.KaizenSolution)
+            </dd>*@
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Status)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Status)
+            </dd>
+            <hr />
+            <dt>
+                @Html.DisplayNameFor(model => model.UserName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.UserName)
+            </dd>
+            <hr />
+            <dt>
+                @Html.DisplayNameFor(model => model.EmailSentTo)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.EmailSentTo)
+            </dd>
+            <hr />
+            <dt>
+                @Html.DisplayNameFor(model => model.ApprovedBy)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.ApprovedBy)
+            </dd>
+            <hr />
+            <dt>
+                @Html.DisplayNameFor(model => model.Comment)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Comment)
+            </dd>
+            <hr />
+            <dt>
+                @Html.DisplayNameFor(model => model.CiComment)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.CiComment)
+            </dd>
+            <hr />
+            <dt>
+                @Html.DisplayNameFor(model => model.DateTime)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DateTime)
+            </dd>
+            <hr />
+            <dt>
+                @Html.DisplayNameFor(model => model.DateOfApproval)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DateOfApproval)
+            </dd>
+            <hr />
+            <dt>
+                @Html.DisplayNameFor(model => model.DateCompleted)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DateCompleted)
+            </dd>
+            <hr />
+            <dt>
+                @Html.DisplayNameFor(model => model.WorkerID)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.WorkerID)
+            </dd>
+            <hr />
+            <dt>
+                @Html.DisplayNameFor(model => model.WorkerName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.WorkerName)
+            </dd>
+            <hr />
+            <dt>
+                @Html.DisplayNameFor(model => model.WorkerLastname)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.WorkerLastname)
+            </dd>
+
+
+
+
+        </dl>
+    </div>
+
+
+
+
+        
+
+        <div class="form-group">
+
+            @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-2" })
+            <span class="badge badge-info" style="background-color:deepskyblue; display: none;" onclick="info()" id="info">Info</span>
+            <div class="col-md-10">
+                @Html.DropDownListFor(m => m.Status,
+                        new SelectList(Enum.GetValues(typeof(ciStatus))),
+                         new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+            </div>
+            <span class="badge badge-info" style="background-color:deepskyblue; display: none;" onclick="info()" id="info">Info</span>
+        </div>
+
+
+
+        @Html.HiddenFor(model => model.IdeaID)
+
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CiComment, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CiComment, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CiComment, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" onclick="notification()" class="btn btn-default" />
+
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "CIDash", null, new { @class = "btn btn-default" })
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
