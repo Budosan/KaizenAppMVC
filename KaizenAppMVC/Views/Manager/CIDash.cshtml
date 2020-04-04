@@ -1,0 +1,217 @@
+﻿
+
+@model IEnumerable<KaizenAppMVC.Models.CompletedKaizenModel>
+
+@{
+    Layout = "~/Views/Shared/_Layout - Manager.cshtml";
+    ViewBag.Title = "CIDash";
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="~/Scripts/table2excel.js" type="text/javascript"></script>
+<h2>CIDash</h2>
+
+<div>
+    @Html.EditorFor(model => model.First().Search, new { htmlAttributes = new { @class = "form-control", @id = "search", @placeholder = "Pretraga..." } })
+    @Html.ValidationMessageFor(model => model.First().Search, "", new { @class = "text-danger" })
+</div>
+
+<script>
+    $(document).ready(function () {
+        function Contains(text_one, text_two) {
+            if (text_one.indexOf(text_two) != -1)
+                return true;
+        }
+        $("#search").keyup(function () {
+            var searchText = $("#search").val().toLowerCase();
+            $(".Search").each(function () {
+                if (!Contains($(this).text().toLowerCase(), searchText)) {
+                    $(this).hide();
+                }
+                else {
+                    $(this).show();
+                }
+            });
+
+        });
+
+    });
+</script>
+<br />
+
+<input type="button" id="export-btn" value="Export" class="btn btn-default" />
+<br />
+<br />
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="~/Scripts/table2excel.js" type="text/javascript"></script>
+<script type="text/javascript">
+    (function( $ ) {
+    $(function () {
+        $("#export-btn").click(function () {
+            $("#kaizen_tbale").table2excel({
+                exclude: ".excludeThisClass",
+                name: "Worksheet Name",
+                filename: "KaizenDB" //do not include extension
+            });
+        });
+    });
+})(jQuery);
+</script>
+
+
+
+<table class="table table-hover bor" id="kaizen_tbale">
+    <tr>
+        <th class="text-center">
+            @Html.DisplayNameFor(model => model.First().IdeaID)
+        </th>
+        <th class="text-center">
+            @Html.DisplayNameFor(model => model.KaizenSuggestion)
+        </th>
+        @*<th>
+                @Html.DisplayNameFor(model => model.KaizenSolution)
+            </th>*@
+        <th class="text-center">
+            @Html.DisplayNameFor(model => model.DepartmentName)
+        </th>
+        <th class="text-center">
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th class="text-center">
+            @Html.DisplayNameFor(model => model.WorkerName)
+        </th>
+        <th class="text-center">
+            @Html.DisplayNameFor(model => model.WorkerID)
+        </th>
+        <th class="text-center">
+            @Html.DisplayNameFor(model => model.WorkerLastname)
+        </th>
+        <th class="text-center">
+            @Html.DisplayNameFor(model => model.DateTime)
+        </th>
+        @*<th>
+                @Html.DisplayNameFor(model => model.Comment)
+            </th>*@
+        <th class="text-center">
+            @Html.DisplayNameFor(model => model.DateOfApproval)
+        </th>
+        <th class="text-center">
+            @Html.DisplayNameFor(model => model.DateCompleted)
+        </th>
+        <th class="text-center">
+            @Html.DisplayNameFor(model => model.UserName)
+        </th>
+        @*<th>
+                @Html.DisplayNameFor(model => model.Search)
+            </th>*@
+        @*<th>
+                @Html.DisplayNameFor(model => model.ManagerEmail)
+            </th>*@
+        <th class="text-center">
+            @Html.DisplayNameFor(model => model.ApprovedBy)
+        </th>
+        @*<th>
+                @Html.DisplayNameFor(model => model.CiComment)
+            </th>*@
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr class="Search" , id="Search">
+            <td>
+                @Html.DisplayFor(modelItem => item.IdeaID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.KaizenSuggestion)
+            </td>
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.KaizenSolution)
+                </td>*@
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.DepartmentName)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.WorkerName)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.WorkerID)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.WorkerLastname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateTime)
+            </td>
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.Comment)
+                </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.DateOfApproval)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateCompleted)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.Search)
+                </td>*@
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.ManagerEmail)
+                </td>*@
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.ApprovedBy)
+            </td>
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.CiComment)
+                </td>*@
+
+            <td>
+                @Html.ActionLink("Promeni", "CI", new { id = item.IdeaID }, new { @class = "btn btn-default", @style = "background-color: #ADD8E6" })
+
+            </td>
+        </tr>
+    }
+
+</table>
+@*<script type="text/javascript">
+        $(document).ready(function (exportTableToExcel) {
+        function exportTableToExcel(tableID, filename = '') {
+            var downloadLink;
+            var dataType = 'application/vnd.ms-excel';
+            var tableSelect = $('#kaizen_tbale');
+            var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+
+            // Specify file name
+            filename = filename ? filename + '.xls' : 'excel_data.xls';
+
+            // Create download link element
+            downloadLink = document.createElement("a");
+
+            document.body.appendChild(downloadLink);
+
+            if (navigator.msSaveOrOpenBlob) {
+                var blob = new Blob(['\ufeff', tableHTML], {
+                    type: dataType
+                });
+                navigator.msSaveOrOpenBlob(blob, filename);
+            } else {
+                // Create a link to the file
+                downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+
+                // Setting the file name
+                downloadLink.download = filename;
+
+                //triggering the function
+                downloadLink.click();
+            }
+        }
+
+    </script>*@

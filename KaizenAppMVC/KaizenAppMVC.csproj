@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -25,6 +26,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TypeScriptToolsVersion>3.6</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,6 +36,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <IncludeIisSettings>true</IncludeIisSettings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,16 +48,47 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.5.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\packages\BouncyCastle.1.8.5\lib\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="Dapper, Version=1.60.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.1.60.6\lib\net451\Dapper.dll</HintPath>
+    </Reference>
+    <Reference Include="MailKit, Version=2.2.0.0, Culture=neutral, PublicKeyToken=4e064fe7c44a8f1b, processorArchitecture=MSIL">
+      <HintPath>..\packages\MailKit.2.2.0\lib\net45\MailKit.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Data.Edm, Version=5.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.Edm.5.6.0\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.OData, Version=5.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.OData.5.6.0\lib\net40\Microsoft.Data.OData.dll</HintPath>
+    </Reference>
+    <Reference Include="MimeKit, Version=2.2.0.0, Culture=neutral, PublicKeyToken=bede1c8a46c66814, processorArchitecture=MSIL">
+      <HintPath>..\packages\MimeKit.2.2.0\lib\net45\MimeKit.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Spatial, Version=5.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Spatial.5.6.0\lib\net40\System.Spatial.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Http.OData, Version=5.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.OData.5.3.1\lib\net45\System.Web.Http.OData.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -134,51 +168,251 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ManagerController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AuthorizationDataModel.cs" />
+    <Compile Include="Models\AuthorizationManager.cs" />
+    <Compile Include="Models\CIKaizenApprovalModel.cs" />
+    <Compile Include="Models\CompletedKaizenModel.cs" />
+    <Compile Include="Models\ConfirmCompleteModel.cs" />
+    <Compile Include="Models\KaizenApproval.cs" />
+    <Compile Include="Models\KaizenModel.cs" />
+    <Compile Include="Models\KaizenPregled.cs" />
+    <Compile Include="Models\KaizenUserEditModel.cs" />
+    <Compile Include="Models\LocalModel.cs" />
+    <Compile Include="Models\ManagerEditModel.cs" />
+    <Compile Include="Models\PorcessorModel.cs" />
+    <Compile Include="Models\ResponseModel.cs" />
+    <Compile Include="Models\SqlDataAccess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-responsive.css" />
+    <Content Include="Content\bootstrap-responsive.min.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\images\glyphicons-halflings-white.png" />
+    <Content Include="Content\images\glyphicons-halflings.png" />
+    <Content Include="Content\notify.css" />
+    <Content Include="Content\notify.min.css" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\bootstrap-table.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <None Include="Scripts\jquery-3.3.1.intellisense.js" />
-    <Content Include="Scripts\jquery-3.3.1.js" />
-    <Content Include="Scripts\jquery-3.3.1.min.js" />
-    <Content Include="Scripts\jquery-3.3.1.slim.js" />
-    <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\jquery-3.4.1.js" />
+    <Content Include="Scripts\jquery-3.4.1.min.js" />
+    <Content Include="Scripts\jquery-3.4.1.slim.js" />
+    <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
+    <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.4.1.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-notify.js" />
+    <Content Include="Scripts\jquery-notify.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Web.config" />
+    <Content Include="Scripts\jquery.table2excel.js" />
+    <Content Include="Scripts\table2excel.js" />
+    <Content Include="SW\sweetalert2-master\.eslintrc.js" />
+    <Content Include="SW\sweetalert2-master\assets\GitHub-social-preview.png" />
+    <Content Include="SW\sweetalert2-master\assets\glitch_remix.gif" />
+    <Content Include="SW\sweetalert2-master\assets\swal2-logo-square.png" />
+    <Content Include="SW\sweetalert2-master\assets\swal2-logo.png" />
+    <Content Include="SW\sweetalert2-master\assets\sweetalert2.gif" />
+    <Content Include="SW\sweetalert2-master\bin\postinstall.js" />
+    <Content Include="SW\sweetalert2-master\gulpfile.js" />
+    <Content Include="SW\sweetalert2-master\karma.conf.js" />
+    <Content Include="SW\sweetalert2-master\release.config.js" />
+    <Content Include="SW\sweetalert2-master\src\constants.js" />
+    <Content Include="SW\sweetalert2-master\src\enhancers\withNoNewKeyword.js" />
+    <Content Include="SW\sweetalert2-master\src\globalState.js" />
+    <Content Include="SW\sweetalert2-master\src\instanceMethods.js" />
+    <Content Include="SW\sweetalert2-master\src\instanceMethods\buttons-handlers.js" />
+    <Content Include="SW\sweetalert2-master\src\instanceMethods\close.js" />
+    <Content Include="SW\sweetalert2-master\src\instanceMethods\enable-disable-elements.js" />
+    <Content Include="SW\sweetalert2-master\src\instanceMethods\getInput.js" />
+    <Content Include="SW\sweetalert2-master\src\instanceMethods\hideLoading.js" />
+    <Content Include="SW\sweetalert2-master\src\instanceMethods\keydown-handler.js" />
+    <Content Include="SW\sweetalert2-master\src\instanceMethods\popup-click-handler.js" />
+    <Content Include="SW\sweetalert2-master\src\instanceMethods\progress-steps.js" />
+    <Content Include="SW\sweetalert2-master\src\instanceMethods\show-reset-validation-error.js" />
+    <Content Include="SW\sweetalert2-master\src\instanceMethods\update.js" />
+    <Content Include="SW\sweetalert2-master\src\instanceMethods\_main.js" />
+    <Content Include="SW\sweetalert2-master\src\privateMethods.js" />
+    <Content Include="SW\sweetalert2-master\src\privateProps.js" />
+    <Content Include="SW\sweetalert2-master\src\staticMethods.js" />
+    <Content Include="SW\sweetalert2-master\src\staticMethods\argsToParams.js" />
+    <Content Include="SW\sweetalert2-master\src\staticMethods\dom.js" />
+    <Content Include="SW\sweetalert2-master\src\staticMethods\fire.js" />
+    <Content Include="SW\sweetalert2-master\src\staticMethods\mixin.js" />
+    <Content Include="SW\sweetalert2-master\src\staticMethods\queue.js" />
+    <Content Include="SW\sweetalert2-master\src\staticMethods\showLoading.js" />
+    <Content Include="SW\sweetalert2-master\src\staticMethods\timer.js" />
+    <Content Include="SW\sweetalert2-master\src\SweetAlert.js" />
+    <Content Include="SW\sweetalert2-master\src\sweetalert2.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\aria.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\classes.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\defaultInputValidators.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\DismissReason.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\dom\animationEndEvent.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\dom\domUtils.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\dom\getters.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\dom\index.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\dom\init.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\dom\inputUtils.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\dom\measureScrollbar.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\dom\parseHtmlToContainer.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\dom\renderers\render.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\dom\renderers\renderActions.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\dom\renderers\renderCloseButton.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\dom\renderers\renderContainer.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\dom\renderers\renderContent.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\dom\renderers\renderFooter.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\dom\renderers\renderHeader.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\dom\renderers\renderIcon.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\dom\renderers\renderImage.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\dom\renderers\renderInput.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\dom\renderers\renderPopup.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\dom\renderers\renderProgressSteps.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\dom\renderers\renderTitle.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\ieFix.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\iosFix.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\isNodeEnv.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\openPopup.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\params.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\scrollbarFix.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\setParameters.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\Timer.js" />
+    <Content Include="SW\sweetalert2-master\src\utils\utils.js" />
+    <Content Include="SW\sweetalert2-master\test\.eslintrc.js" />
+    <Content Include="SW\sweetalert2-master\test\jest\jest.test.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\a11y.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\api\api.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\api\mixins.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\browsers\ie.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\focus-trap.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\focus.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\helpers.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\jquery.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\methods\clickConfirm.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\methods\close.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\methods\getFocusableElements.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\methods\getIcon.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\methods\getIcons.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\methods\getProgressSteps.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\methods\getTimerLeft.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\methods\increaseTimer.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\methods\isTimerRunning.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\methods\resumeTimer.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\methods\setProgressSteps.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\methods\showLoading.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\methods\showProgressSteps.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\methods\stopTimer.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\methods\toggleTimer.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\methods\update.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\outside-click.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\params\animation.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\params\customClass.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\params\grow.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\params\html.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\params\image.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\params\input.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\params\inputAttributes.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\params\inputValue.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\params\padding.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\params\positioning.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\params\stopKeydownPropagation.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\params\target.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\params\type.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\params\validationMessage.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\rtl.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\tests.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\toast.js" />
+    <Content Include="SW\sweetalert2-master\test\qunit\validation.js" />
+    <Content Include="SW\sweetalert2-master\test\require-in-node.js" />
+    <Content Include="SW\sweetalert2-master\test\sandbox.html" />
+    <Content Include="SW\sweetalert2-master\tools\build-dist.js" />
+    <Content Include="SW\sweetalert2-master\tools\purge-jsdelivr.js" />
+    <Content Include="Views\resources\LearLogo.png" />
+    <Content Include="Views\resources\LearLogo_%282%29_resized.png" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Views\Web.config" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Kaizen.cshtml" />
+    <Content Include="Views\Home\MyKaizenDetails.cshtml" />
+    <Content Include="Views\Manager\Add.cshtml" />
+    <Content Include="Views\Manager\List.cshtml" />
+    <Content Include="Views\Manager\Edit.cshtml" />
+    <Content Include="Views\Manager\Approvallist.cshtml" />
+    <Content Include="Views\Home\MyKaizen.cshtml" />
+    <Content Include="Views\Home\Details.cshtml" />
+    <Content Include="Views\Home\Edit.cshtml" />
+    <Content Include="Views\Manager\MyApprovals.cshtml" />
+    <Content Include="Views\Shared\_Layout - Manager.cshtml" />
+    <Content Include="Views\Home\KaizenPreview.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Manager\ApprovedList.cshtml" />
+    <Content Include="Views\Manager\CI.cshtml" />
+    <Content Include="Views\Home\Completed.cshtml" />
+    <Content Include="Views\Manager\CIDash.cshtml" />
+    <Content Include="SW\sweetalert2-master\.babelrc" />
+    <Content Include="SW\sweetalert2-master\.editorconfig" />
+    <Content Include="SW\sweetalert2-master\.github\CODE_OF_CONDUCT.md" />
+    <Content Include="SW\sweetalert2-master\.github\FUNDING.yml" />
+    <Content Include="SW\sweetalert2-master\.github\ISSUE_TEMPLATE\01_bug_report.md" />
+    <Content Include="SW\sweetalert2-master\.github\ISSUE_TEMPLATE\02_feature_request.md" />
+    <Content Include="SW\sweetalert2-master\.github\ISSUE_TEMPLATE\03_question.md" />
+    <Content Include="SW\sweetalert2-master\.github\workflows\ci.yml" />
+    <Content Include="SW\sweetalert2-master\.github\workflows\cron.yml" />
+    <Content Include="SW\sweetalert2-master\.gitignore" />
+    <Content Include="SW\sweetalert2-master\.stylelintrc.json" />
+    <Content Include="SW\sweetalert2-master\CHANGELOG.md" />
+    <Content Include="SW\sweetalert2-master\DONATIONS.md" />
+    <Content Include="SW\sweetalert2-master\LICENSE" />
+    <Content Include="SW\sweetalert2-master\package.json" />
+    <Content Include="SW\sweetalert2-master\README.md" />
+    <Content Include="SW\sweetalert2-master\src\scss\_animations.scss" />
+    <Content Include="SW\sweetalert2-master\src\scss\_body.scss" />
+    <Content Include="SW\sweetalert2-master\src\scss\_core.scss" />
+    <Content Include="SW\sweetalert2-master\src\scss\_mixins.scss" />
+    <Content Include="SW\sweetalert2-master\src\scss\_polyfills.scss" />
+    <Content Include="SW\sweetalert2-master\src\scss\_theming.scss" />
+    <Content Include="SW\sweetalert2-master\src\scss\_toasts-animations.scss" />
+    <Content Include="SW\sweetalert2-master\src\scss\_toasts-body.scss" />
+    <Content Include="SW\sweetalert2-master\src\scss\_toasts.scss" />
+    <Content Include="SW\sweetalert2-master\src\sweetalert2.scss" />
+    <Content Include="SW\sweetalert2-master\src\variables.scss" />
+    <Content Include="SW\sweetalert2-master\tools\deploy-to-netlify.sh" />
+    <Content Include="SW\sweetalert2-master\yarn.lock" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -190,14 +424,22 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <None Include="packages.config" />
-    <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
-    <Content Include="Scripts\jquery-3.3.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="SW\sweetalert2-master\sweetalert2.d.ts" />
+    <TypeScriptCompile Include="SW\sweetalert2-master\test\ts\dist-sweetalert2.ts" />
+    <TypeScriptCompile Include="SW\sweetalert2-master\test\ts\simple-usage.ts" />
+    <TypeScriptCompile Include="SW\sweetalert2-master\test\ts\src-sweetalert2.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
@@ -211,7 +453,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>59067</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:59067/</IISUrl>
+          <IISUrl>http://localhost:5908/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

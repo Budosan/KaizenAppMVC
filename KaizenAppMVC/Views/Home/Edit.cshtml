@@ -1,0 +1,145 @@
+﻿@model KaizenAppMVC.Models.KaizenUserEditModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.11.0/sweetalert2.all.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.11.0/sweetalert2.min.css" />
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+<h2>Izmeni</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>ID: @Html.DisplayFor(model => model.IdeaID)</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.IdeaID)
+
+
+
+
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.DepartmentName)
+            </dt>
+
+
+            <dd>
+                @Html.DisplayFor(model => model.DepartmentName)
+            </dd>
+            <hr />
+            @*<dt>
+                    @Html.DisplayNameFor(model => model.KaizenSuggestion)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.KaizenSuggestion)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.KaizenSolution)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.KaizenSolution)
+                </dd>*@
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Status)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Status)
+            </dd>
+            <hr />
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.DateTime)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DateTime)
+            </dd>
+            <hr />
+            <dt>
+                @Html.DisplayNameFor(model => model.WorkerID)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.WorkerID)
+            </dd>
+            <hr />
+            <dt>
+                @Html.DisplayNameFor(model => model.WorkerName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.WorkerName)
+            </dd>
+            <hr />
+            <dt>
+                @Html.DisplayNameFor(model => model.WorkerLastname)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.WorkerLastname)
+            </dd>
+            <hr />
+        </dl>
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.KaizenSuggestion, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.KaizenSuggestion, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.KaizenSuggestion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.KaizenSolution, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.KaizenSolution, 10, 500, new { htmlAttributes = new { @class = "form-control", style = "margin: 0px; width: 570px; height: 165px;" } })
+                @Html.ValidationMessageFor(model => model.KaizenSolution, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" onclick="myFunction()" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Moji Predlozi", "MyKaizen", null, new { @class="btn btn-default" })
+</div>
+<script>
+    function myFunction() {
+        var x = document.getElementById("KaizenSolution").value;
+        var y = document.getElementById("KaizenSuggestion").value;
+
+
+        if (x != null && x != '' && y != null && y != '') {
+            swal(
+                'Uspešno popunjeno!',
+                'Kaizen predlog je poslat!',
+                'success'
+            )
+        };
+
+    };
+</script>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

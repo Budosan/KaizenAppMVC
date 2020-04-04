@@ -1,0 +1,51 @@
+﻿@model KaizenAppMVC.Models.KaizenUserEditModel
+
+<meta http-equiv="x-ua-compatible" content="IE=11">
+@{
+    ViewBag.Title = "MyKaizenDetails";
+}
+
+<h2>MyKaizenDetails</h2>
+
+<div>
+    <h4>KaizenUserEditModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.IdeaID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IdeaID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DepartmentName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DepartmentName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.KaizenSuggestion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.KaizenSuggestion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.KaizenSoution)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.KaizenSoution)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
